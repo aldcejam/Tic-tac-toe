@@ -10,11 +10,10 @@ let caseMarkedPlayers = []
 /* ===================================== Winner ===================================== */
 let winner = '';
 function Wins(X_or_O) {
-    let indexs = [cases[0].innerHTML, cases[1].innerHTML,
-    cases[2].innerHTML, cases[3].innerHTML, cases[4].innerHTML,
-    cases[5].innerHTML, cases[6].innerHTML, cases[7].innerHTML,
-    cases[8].innerHTML];
-
+    let indexs = [];
+    for (var i = 0; i < cases.length;i++){
+        indexs.push(cases[i].innerHTML)
+    }
     if ((indexs[0] == X_or_O && indexs[1] == X_or_O && indexs[2] == X_or_O)
         || (indexs[3] == X_or_O && indexs[4] == X_or_O && indexs[5] == X_or_O)
         || (indexs[6] == X_or_O && indexs[7] == X_or_O && indexs[8] == X_or_O)
