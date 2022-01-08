@@ -4,29 +4,33 @@ let showWinner = document.querySelector('.winner');
 let cases = document.querySelectorAll('.block');
 
 let unmarkedCases = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-let caseMarkedPlayers = []
+let caseMarkedPlayers = [];
+let winner = '';
+
 
 
 /* ===================================== Winner ===================================== */
-let winner = '';
-function Wins(X_or_O) {
-    let indexs = [];
+function Wins(XorO) {
+    let indexsOfArrayCases = [];
     for (var i = 0; i < cases.length;i++){
-        indexs.push(cases[i].innerHTML)
+        indexsOfArrayCases.push(cases[i].innerHTML)
     }
-    if ((indexs[0] == X_or_O && indexs[1] == X_or_O && indexs[2] == X_or_O)
-        || (indexs[3] == X_or_O && indexs[4] == X_or_O && indexs[5] == X_or_O)
-        || (indexs[6] == X_or_O && indexs[7] == X_or_O && indexs[8] == X_or_O)
-        || (indexs[0] == X_or_O && indexs[3] == X_or_O && indexs[6] == X_or_O)
-        || (indexs[1] == X_or_O && indexs[4] == X_or_O && indexs[7] == X_or_O)
-        || (indexs[2] == X_or_O && indexs[5] == X_or_O && indexs[8] == X_or_O)
-        || (indexs[0] == X_or_O && indexs[4] == X_or_O && indexs[8] == X_or_O)
-        || (indexs[2] == X_or_O && indexs[4] == X_or_O && indexs[6] == X_or_O)
+    if ((indexsOfArrayCases[0] == XorO && indexsOfArrayCases[1] == XorO && indexsOfArrayCases[2] == XorO)
+        || (indexsOfArrayCases[3] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[5] == XorO)
+        || (indexsOfArrayCases[6] == XorO && indexsOfArrayCases[7] == XorO && indexsOfArrayCases[8] == XorO)
+        || (indexsOfArrayCases[0] == XorO && indexsOfArrayCases[3] == XorO && indexsOfArrayCases[6] == XorO)
+        || (indexsOfArrayCases[1] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[7] == XorO)
+        || (indexsOfArrayCases[2] == XorO && indexsOfArrayCases[5] == XorO && indexsOfArrayCases[8] == XorO)
+        || (indexsOfArrayCases[0] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[8] == XorO)
+        || (indexsOfArrayCases[2] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[6] == XorO)
     ) {
-        winner = X_or_O
+        winner = XorO
     }
 
-    /* ========== Show Winner ========== */
+    ShowWinner();
+}
+
+function ShowWinner(){
     if (winner == x || winner == o) {
         if (winner == x){
             showWinner.innerHTML = 'Winner ' + 'X';
@@ -41,54 +45,51 @@ function Wins(X_or_O) {
 }
 
 
+/* ===================================== player ===================================== */
+function Player(casa, index){
+    casa.innerHTML += x;
+    
+    caseMarkedPlayers.push(index)
+    
+    /* ===== update unmarkedCases without the X ===== */
+    unmarkedCases = unmarkedCases.filter(x => {
+        return JSON.stringify(caseMarkedPlayers).indexOf(JSON.stringify(x)) < 0;
+    });
+    Wins(x);
+}
+
 /* ===================================== Opponent ===================================== */
 function Oppnent(parameUnmarkedCases) {
-    /*  ================= opponent move ================= */
+
     var random = Math.floor(Math.random() * parameUnmarkedCases.length);
-
+    
     if (cases[parameUnmarkedCases[random]].children[0] == null) {
-        /* ===== marked move opponent in game ===== */
+
         cases[parameUnmarkedCases[random]].innerHTML += o;
-
-        /* ===== mark opponent move in array ===== */
+        
         caseMarkedPlayers.push(parameUnmarkedCases[random])
-
+        
         /* ===== update unmarkedCases without the current position O ===== */
         unmarkedCases = parameUnmarkedCases.filter(o => {
             return JSON.stringify(caseMarkedPlayers).indexOf(JSON.stringify(o)) < 0;
         })
-
+        
     }
-    /* ===== check if O won ===== */
     Wins(o);
 }
 
-/* ===================================== Player ===================================== */
 cases.forEach((casa, index) => {
-    casa.addEventListener('click', function () {
-        /* ========= check if it's over ========= */
+    casa.addEventListener('click', () => {
+        /* ===================================== check game ===================================== */
         if (casa.innerHTML == '<p style="display: none;"></p>' || cases == null) {
             alert('game over')
         }
-        /* ========= check position marked ========= */
         else if (casa.innerHTML == x || casa.innerHTML == o) {
             alert('Marked Position')
         }
-        /* ========= Unmarked Position, Mark X(player) ========= */
+        /* ================= */
         else if (casa.innerHTML == '') {
-            /* ===== marked move player in game ===== */
-            casa.innerHTML += x;
-
-            /* ===== mark player move in array ===== */
-            caseMarkedPlayers.push(index)
-
-            /* ===== update unmarkedCases without the X ===== */
-            unmarkedCases = unmarkedCases.filter(x => {
-                return JSON.stringify(caseMarkedPlayers).indexOf(JSON.stringify(x)) < 0;
-            });
-
-            /* =============== opponent's move and check if X won =============== */
-            Wins(x);
+            Player(casa, index);
             Oppnent(unmarkedCases);
 
         }
