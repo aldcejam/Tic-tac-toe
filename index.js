@@ -12,17 +12,17 @@ let winner = '';
 /* ===================================== Winner ===================================== */
 function Wins(XorO) {
     let indexsOfArrayCases = [];
-    for (var i = 0; i < cases.length;i++){
+    for (var i = 0; i < cases.length; i++) {
         indexsOfArrayCases.push(cases[i].innerHTML)
     }
-    if ((indexsOfArrayCases[0] == XorO && indexsOfArrayCases[1] == XorO && indexsOfArrayCases[2] == XorO)
-        || (indexsOfArrayCases[3] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[5] == XorO)
-        || (indexsOfArrayCases[6] == XorO && indexsOfArrayCases[7] == XorO && indexsOfArrayCases[8] == XorO)
-        || (indexsOfArrayCases[0] == XorO && indexsOfArrayCases[3] == XorO && indexsOfArrayCases[6] == XorO)
-        || (indexsOfArrayCases[1] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[7] == XorO)
-        || (indexsOfArrayCases[2] == XorO && indexsOfArrayCases[5] == XorO && indexsOfArrayCases[8] == XorO)
-        || (indexsOfArrayCases[0] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[8] == XorO)
-        || (indexsOfArrayCases[2] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[6] == XorO)
+    if ((indexsOfArrayCases[0] == XorO && indexsOfArrayCases[1] == XorO && indexsOfArrayCases[2] == XorO) ||
+        (indexsOfArrayCases[3] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[5] == XorO) ||
+        (indexsOfArrayCases[6] == XorO && indexsOfArrayCases[7] == XorO && indexsOfArrayCases[8] == XorO) ||
+        (indexsOfArrayCases[0] == XorO && indexsOfArrayCases[3] == XorO && indexsOfArrayCases[6] == XorO) ||
+        (indexsOfArrayCases[1] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[7] == XorO) ||
+        (indexsOfArrayCases[2] == XorO && indexsOfArrayCases[5] == XorO && indexsOfArrayCases[8] == XorO) ||
+        (indexsOfArrayCases[0] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[8] == XorO) ||
+        (indexsOfArrayCases[2] == XorO && indexsOfArrayCases[4] == XorO && indexsOfArrayCases[6] == XorO)
     ) {
         winner = XorO
     }
@@ -30,27 +30,30 @@ function Wins(XorO) {
     ShowWinner();
 }
 
-function ShowWinner(){
+function BlockGame() {
+    cases = null
+    x = null
+}
+
+function ShowWinner() {
     if (winner == x || winner == o) {
-        if (winner == x){
+        if (winner == x) {
             showWinner.innerHTML = 'Winner ' + 'X';
-        }else{
+        } else {
             showWinner.innerHTML = 'Winner ' + 'O';
         }
+        BlockGame()
 
-        /* ==== blockad emoves ==== */
-        cases = null
-        x = null
     }
 }
 
 
 /* ===================================== player ===================================== */
-function Player(casa, index){
+function Player(casa, index) {
     casa.innerHTML += x;
-    
+
     caseMarkedPlayers.push(index)
-    
+
     /* ===== update unmarkedCases without the X ===== */
     unmarkedCases = unmarkedCases.filter(x => {
         return JSON.stringify(caseMarkedPlayers).indexOf(JSON.stringify(x)) < 0;
@@ -62,18 +65,18 @@ function Player(casa, index){
 function Oppnent(parameUnmarkedCases) {
 
     var random = Math.floor(Math.random() * parameUnmarkedCases.length);
-    
+
     if (cases[parameUnmarkedCases[random]].children[0] == null) {
 
         cases[parameUnmarkedCases[random]].innerHTML += o;
-        
+
         caseMarkedPlayers.push(parameUnmarkedCases[random])
-        
+
         /* ===== update unmarkedCases without the current position O ===== */
         unmarkedCases = parameUnmarkedCases.filter(o => {
             return JSON.stringify(caseMarkedPlayers).indexOf(JSON.stringify(o)) < 0;
         })
-        
+
     }
     Wins(o);
 }
@@ -83,8 +86,7 @@ cases.forEach((casa, index) => {
         /* ===================================== check game ===================================== */
         if (casa.innerHTML == '<p style="display: none;"></p>' || cases == null) {
             alert('game over')
-        }
-        else if (casa.innerHTML == x || casa.innerHTML == o) {
+        } else if (casa.innerHTML == x || casa.innerHTML == o) {
             alert('Marked Position')
         }
         /* ================= */
